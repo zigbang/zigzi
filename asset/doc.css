@@ -1,0 +1,178 @@
+@import "https://s.zigbang.com/zbee/spoqa/css/SpoqaHanSansApp-kr.css";
+
+html {
+    -webkit-print-color-adjust: exact;
+}
+body, html {margin:0; padding:0; min-height:100vh;}
+
+body {
+	font-family: "SpoqaHanSans", sans-serif;
+	color: #000;
+}
+
+a {color:#000}
+
+body:before {
+    display:block; 
+    background: #fff url(https://zigbang.github.io/zigzi/asset/image/zigbang_logo_gray.png) no-repeat 0 0;
+    background-size: 290px auto;
+    width:300px;
+    height:300px;
+    content:"";
+    position:fixed;
+    left:50%;
+    top:50%;
+    margin:-10px 0 0 -150px;
+}
+ 
+#zigbang-zigzi {
+	position: relative;
+    z-index:1;
+}
+
+.cover, .cover2 {
+    page-break-after: always;
+}
+
+#zigbang-zigzi > h2 {
+	margin: 0;
+	line-height: 1.4em;
+    padding-top:0;
+    padding-bottom:10px;
+    border-bottom:1px solid #666;
+}
+
+h1 {
+    font-size: 2.2em;
+    padding-bottom:10px;
+}
+
+h3 {
+    padding: 25px 0 0;
+	margin: 0;
+}
+
+
+h4 {
+    padding: 23px 0 0;
+	margin: 0;
+}
+
+
+h5 {
+    padding: 15px 0 0;
+	margin: 0;
+	line-height: 1em;
+}
+
+
+table {
+    margin-top: 7px;
+	width: 100%;
+	border-collapse: collapse;
+}
+
+table thead th {
+	background: #ccc;
+}
+
+table td,
+table th {
+	padding: 1px 3px;
+	border: 1px solid #ddd;
+}
+
+table tbody tr:nth-child(2n) td,
+table tbody tr:nth-child(2n) th {
+	background: #f1f1f1;
+}
+
+ul,
+ol {
+	margin: 7px 0 0 20px;
+	padding: 0;
+}
+
+li {
+	padding: 0;
+    margin: 0;
+}
+
+p {
+	padding: 7px 0 0;
+	margin: 0;
+}
+
+th, td, li, p {
+    line-height: 1.5em;
+}
+
+img {display:block; max-width:400px; margin-top:10px;}
+
+.cover,
+.cover2 {
+    height:100vh;
+    position:relative;
+}
+
+.cover h1 {
+    padding:300px 0 100px;
+
+}
+
+.cover2 h1 {
+    border-bottom:1px solid #000;
+}
+
+.page-break {page-break-after: always; background:transparent; border-color:transparent; margin:0; padding:0; height:0;}
+.page-break + h2 {margin-top:0;}
+
+p + h2,
+ul + h2,
+ol + h2 {
+    margin-top: 50px !important
+}
+
+li code,
+p code {
+    background-color: #f8f8f8;
+    font-size: 13px;
+    line-height: 16px;
+    overflow: auto;
+    padding: 0 3px;
+    border-radius: 3px; 
+    display:inline-block; vertical-align: middle;
+}
+
+pre code {
+    margin: 0;
+    padding: 0;
+    white-space: pre;
+    border: none;
+    background: transparent; 
+}
+  
+.highlight pre {
+    background-color: #f8f8f8;
+    border: 1px solid #cccccc;
+    font-size: 13px;
+    line-height: 19px;
+    overflow: auto;
+    padding: 6px 10px;
+    border-radius: 3px; 
+}
+  
+pre {
+    background-color: #f8f8f8;
+    border: 1px solid #cccccc;
+    font-size: 13px;
+    line-height: 19px;
+    overflow: auto;
+    padding: 6px 10px;
+    border-radius: 3px; 
+}
+pre code, pre tt {
+    background-color: transparent;
+    border: none; 
+}
+

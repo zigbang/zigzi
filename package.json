@@ -1,0 +1,52 @@
+{
+    "name": "zigzi",
+    "version": "1.0.5",
+    "author": "ZIGBANG Co., Ltd.",
+    "keywords": [
+        "zigbang",
+        "document",
+        "doc",
+        "ppt",
+        "pdf",
+        "html"
+    ],
+    "repository": "https://github.com/zigbang/zigzi",
+    "scripts": {
+        "start": "./bin/run"
+    },
+    "bin": {
+        "zigzi": "./bin/run"
+    },
+    "dependencies": {
+        "@marp-team/marp-cli": "^0.23.3",
+        "@oclif/command": "^1.8.16",
+        "@types/puppeteer": "^5.4.4",
+        "@types/shelljs": "^0.8.8",
+        "marked": "^2.0.1",
+        "puppeteer": "^13.1.2",
+        "shelljs": "^0.8.4"
+    },
+    "devDependencies": {
+        "@oclif/dev-cli": "^1",
+        "@types/marked": "^2.0.1",
+        "@types/node": "^10",
+        "chai": "^4",
+        "ts-node": "^8",
+        "typescript": "^4.5.5"
+    },
+    "files": [
+        "/bin",
+        "/lib",
+        "/docs",
+        "/asset"
+    ],
+    "license": "MIT",
+    "oclif": {
+        "bin": "zigzi"
+    },
+    "types": "lib/index.d.ts",
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org",
+        "access": "public"
+    }
+}

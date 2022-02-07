@@ -1,0 +1,148 @@
+html {
+    -webkit-print-color-adjust: exact;
+  }
+@import "https://s.zigbang.com/zbee/spoqa/css/SpoqaHanSansApp-kr.css";
+
+* {
+	font-family: "SpoqaHanSans", sans-serif;
+	color: #000;
+}
+
+
+body:before {
+    display:block; 
+    background: #fff url(https://s.zigbang.com/zigzi/image/zigbang_logo_gray.png) no-repeat center center;
+    background-size: 50% auto;
+    content:"";
+    position:fixed;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+}
+body {padding: 20px; font-size:14px;}
+body, html, #zigbang-zigzi {display:flex; flex:1; flex-direction: column;; min-height:100%;}
+#zigbang-zigzi {
+	position: relative;
+    z-index:1;
+}
+em {
+	display: block;
+	text-align: center;
+	font-style: normal;
+}
+
+
+header {
+	padding-bottom: 25px;
+	font-size: 34px;
+	letter-spacing: 2px;
+	font-weight: bold;
+	text-align: center;
+	line-height: 1em;
+}
+
+header::before {
+	content: "주식회사 OO";
+}
+
+footer {
+    position:absolute;
+    left:0; right:0; bottom:0;
+	padding-top: 30px;
+	text-align: center;
+	font-size: 20px;
+	letter-spacing: 2px;
+	line-height: 1.5em;
+	font-weight: bold;
+}
+
+footer::before {
+	content: "주 식 회 사  O 　 O\A대 표 이 사  홍 길 동";
+	white-space: pre;
+}
+
+footer::after {
+    display: block;
+	padding-top: 50px;
+	font-size: 9px;
+	font-style: normal;
+	letter-spacing: 0;
+	line-height: 1.3em;
+	font-weight: normal;
+	border-bottom: 1px solid #333;
+    padding-bottom:10px;
+	content: "서울특별시 강남구 역삼로 0길 01, 1층 (역삼동, OO빌딩), tel)02-000-0000";
+}
+
+blockquote {
+	padding: 7px 10px;
+	font-size: 14px;
+	line-height: 1em;
+	margin: 0 !important;
+    display:block;
+    font-weight:bold;
+}
+blockquote p {margin:0; padding:0;}
+blockquote:last-of-type {
+    position:relative;
+    padding-bottom: 15px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #333;
+}
+blockquote:after {
+    position:absolute;
+    content:"";
+    left:0; right:0; bottom:1px;
+    height:1px;
+    background:#333;
+}
+
+header + h2 {
+	padding-top: 10px;
+}
+
+table {
+    margin-top: 20px;
+	width: 100%;
+	border-collapse: collapse;
+}
+
+table thead th {
+	background: #ccc;
+}
+
+table td,
+table th {
+	padding: 3px;
+	border: 1px solid #ddd;
+	font-size: 14px;
+}
+
+table tbody tr:nth-child(2n) td,
+table tbody tr:nth-child(2n) th {
+	background: #f1f1f1;
+}
+
+ul,
+ol {
+	margin: 10px 0 0 20px;
+	padding: 0;
+}
+
+li {
+	padding: 0 0 5px;
+    line-height: 1.4em;
+
+}
+
+p {
+	margin: 20px 0 0;
+	padding: 0;
+    line-height: 1.5em;
+}
+
+
+@media print {
+	body {padding:0;}
+}

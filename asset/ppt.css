@@ -1,0 +1,251 @@
+/* @theme ppt */
+
+
+@import "https://s.zigbang.com/zbee/spoqa/css/SpoqaHanSansApp-kr.css";
+
+section * {
+	font-family: "SpoqaHanSans", sans-serif;
+	color: #333;
+}
+
+section {
+	position: relative;
+	width: 960px;
+	height: 540px;
+	padding: 50px;
+	background: #fff;
+	background-image: url(https://s.zigbang.com/zigzi/image/zigbang_ppt_template_wide_bg2.svg);
+	background-size: cover;    
+    font-size:14px;
+}
+
+section::after {
+	position: absolute;
+	right: 50px;
+	top: 55px;
+	width: auto;
+	height: auto;
+	bottom: auto;
+	margin: 0;
+	padding: 0;
+	color: #ffa400;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+section h2 {
+	color: #ffa400;
+	margin: 0 0 20px;
+    min-height: 30px;
+	padding: 0;
+	font-size: 1.42em;
+	font-weight: 600;
+	border-bottom: 1px solid #ffa400;
+}
+
+section h3 {
+	color: #333;
+	margin: 30px 0 0;
+	padding: 0;
+	font-size: 1.28em;
+	font-weight: 600; 
+}
+
+section h4 {
+	color: #333;
+	margin: 30px 0 0;
+	padding: 0;
+	font-weight: 600;
+    font-size: 1.15em;
+}
+
+section h2 + h3,
+section h2 + h4,
+section h2 + p,
+section h2 + ul,
+section h2 + ol,
+section h2 + table {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+section ul,
+section ol {
+	margin: 10px 0 0 25px;
+	padding: 0;
+}
+section li {
+	padding: 0;
+	font-size: 1em;
+    line-height: 1.5em;
+}
+
+section p {
+	font-size: 1em;
+    line-height: 1.5em;
+	margin: 10px 0 0;
+}
+section a {
+	font-size: 1em;
+}
+
+section img {
+	display: inline-block;
+	width: auto;
+}
+
+section.cover,
+section.cover2,
+section.toc {
+	background-image: url(https://s.zigbang.com/zigzi/image/zigbang_ppt_template_wide_bg.svg);
+	background-size: cover;
+}
+
+section.cover::before,
+section.cover2::before {
+    position: absolute;
+    right:50px;
+    top:50px;
+    content:" ";
+    width:100px;
+    height:50px;
+    background: url(https://s.zigbang.com/zigzi/image/Zigbang_CI_Horizontal_RGB.svg) no-repeat center center ;
+}
+
+section.cover::after,
+section.cover2::after,
+section.toc::after {
+	display: none;
+}
+
+section.cover h1 {
+	padding: 90px 0 10px;
+	margin: 0;
+	color: #ffa400;
+	font-size: 2.85em;
+    line-height: 1em;
+}
+
+section.cover h2 {
+	font-size: 1.42em;
+    line-height: 1em;
+	color: #444;
+	margin: 0;
+	padding: 0;
+    border: none;
+}
+
+section.cover p {
+	position: absolute;
+	left: 50px;
+	bottom: 50px;
+	font-size: 1.28em;
+	line-height: 1.5em;
+	margin: 0;
+}
+
+section.cover2 p {
+	position: absolute;
+	left: 50px;
+	top: 100px;
+	font-size: 1.07em;
+	margin: 0;
+	padding: 0;
+	color: #444;
+	font-weight: normal;
+}
+
+section.cover2 h1 {
+	padding: 80px 0 0;
+	margin: 0;
+	font-size: 2.85em;
+	color: #ffa400;
+}
+
+section.cover2 ul {
+	position: absolute;
+	left: 50px;
+	bottom: 50px;
+	line-height: 1.5em;
+	border-top: 1px solid #ffa400;
+	right: 50px;
+	margin: 0;
+	padding: 10px 0 0;
+}
+
+section.cover2 ul li {
+	padding: 5px 0;
+	list-style: none;
+	font-size: 1.05em;
+}
+
+section.cover2 ul li strong {
+	color: #ffa400;
+	display: inline-block;
+	width: 120px;
+	font-size: 1.05em;
+}
+
+section.toc h1 {
+	border: none;
+	font-size: 1.64em;
+	padding-top: 20px;
+	margin-bottom: 20px;
+}
+section.toc h1::after {
+	display: block;
+	margin-top: 5px;
+	content: " ";
+	width: 23px;
+	height: 1px;
+	background: #ffa400;
+}
+
+section.toc li,
+section.toc p {
+	font-size: 1.18em;
+	line-height: 1.5em;
+}
+
+table {
+	width: 100%;
+	margin: 10px 0 0;
+	border-collapse: collapse;
+	color: #666;
+	table-layout: fixed;
+}
+
+table * {
+	font-size: 1em;
+}
+
+table thead th {
+	background: #f7bd5b;
+	color: #fff;
+	padding: 5px;
+}
+
+table tbody td,
+table tbody th {
+	padding: 5px;
+	border-bottom: 1px solid #e7e7e7;
+	border-left: 1px solid #e7e7e7;
+}
+
+table tbody tr td:first-child,
+table tbody tr th:first-child {
+	border-left: 0;
+}
+
+section.last {
+    background: #ffa400;
+    display:flex;
+    align-items: center;
+    justify-content:center;text-align: center;
+    color:#fff;
+    font-size:50px;
+	font-family: "SpoqaHanSans", sans-serif;
+}
+section.last * {color:#fff}
+section.last::after {
+    display: none;
+} 
