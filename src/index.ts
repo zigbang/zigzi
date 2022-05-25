@@ -75,7 +75,7 @@ class Zigzi extends Command {
 
 		const pdfFileName = `${this.file.replace(".md", ".pdf")}`
 		await child_process.execSync(
-			`npx marp --allow-local-files ${this.file} -o ${pdfFileName} --theme ${cssFile}`
+			`npx @marp-team/marp-cli@latest --allow-local-files ${this.file} -o ${pdfFileName} --theme ${cssFile}`
 		)
 	}
 
