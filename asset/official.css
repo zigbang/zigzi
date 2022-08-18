@@ -8,18 +8,6 @@ html {
 	color: #000;
 }
 
-
-body:before {
-    display:block; 
-    background: #fff url(https://s.zigbang.com/zigzi/image/zigbang_logo_gray.png) no-repeat center center;
-    background-size: 50% auto;
-    content:"";
-    position:fixed;
-    left:0;
-    top:0;
-    right:0;
-    bottom:0;
-}
 body {padding: 20px; font-size:14px;}
 body, html, #zigbang-zigzi {display:flex; flex:1; flex-direction: column;; min-height:100%;}
 #zigbang-zigzi {
@@ -34,45 +22,30 @@ em {
 
 
 header {
-	padding-bottom: 25px;
-	font-size: 34px;
-	letter-spacing: 2px;
-	font-weight: bold;
-	text-align: center;
-	line-height: 1em;
+	border-bottom: 1px solid #333;
+	padding-bottom: 20px;
 }
 
 header::before {
-	content: "주식회사 OO";
+    position: absolute;
+    left:0px;
+    top:0px;
+    content:" ";
+    width: 100px;
+    height: 36px;
+	background: url(https://zigbang.github.io/zigzi/asset/image/Zigbang_CI_Horizontal_RGB.svg) no-repeat center center ;
 }
 
-footer {
-    position:absolute;
-    left:0; right:0; bottom:0;
-	padding-top: 30px;
-	text-align: center;
-	font-size: 20px;
-	letter-spacing: 2px;
-	line-height: 1.5em;
-	font-weight: bold;
-}
-
-footer::before {
-	content: "주 식 회 사  O 　 O\A대 표 이 사  홍 길 동";
-	white-space: pre;
-}
-
-footer::after {
-    display: block;
-	padding-top: 50px;
+header::after {
+	float: right;
 	font-size: 9px;
 	font-style: normal;
 	letter-spacing: 0;
-	line-height: 1.3em;
+	line-height: 2.3em;
 	font-weight: normal;
-	border-bottom: 1px solid #333;
-    padding-bottom:10px;
-	content: "서울특별시 강남구 역삼로 0길 01, 1층 (역삼동, OO빌딩), tel)02-000-0000";
+	text-align: right;
+	content: "서울특별시 강남구 역삼로17길 64, 4층(역삼동, 제스빌딩)\ATel) 02-568-4909";
+	white-space: pre;
 }
 
 blockquote {
@@ -84,13 +57,15 @@ blockquote {
     font-weight:bold;
 }
 blockquote p {margin:0; padding:0;}
+blockquote:first-of-type {
+	padding-top: 15px;
+}
 blockquote:last-of-type {
     position:relative;
     padding-bottom: 15px;
     margin-bottom: 40px;
-    border-bottom: 1px solid #333;
 }
-blockquote:after {
+blockquote:last-of-type:after {
     position:absolute;
     content:"";
     left:0; right:0; bottom:1px;

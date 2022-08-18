@@ -6,6 +6,7 @@ import * as child_process from "child_process"
 import * as marked from "marked"
 import * as puppeteer from "puppeteer"
 import * as shell from "shelljs"
+import * as pdfParse from "pdf-parse"
 
 import { Command, flags } from "@oclif/command"
 import { readFileSync, writeFileSync } from "fs"
@@ -62,7 +63,11 @@ class Zigzi extends Command {
             } else {
                 await this.toHtml()
                 if (output === "pdf") {
-                    await this.toPdf()
+					if(flags.template === 'zb_official') {
+						await this.toPdfOfficial()
+					} else {
+						await this.toPdf()
+					}
                 }
             }
         }
@@ -91,7 +96,7 @@ class Zigzi extends Command {
 		md = md.replace(RegExp(/-->/g), "")
         let markedHtml
         if(flags.template === "zb_official") {
-            markedHtml = `<header></header> ${marked(md)}<footer></footer>`
+            markedHtml = `<header></header> ${marked(md)}`
         } else {
             markedHtml = marked(md)
         }
@@ -131,14 +136,13 @@ class Zigzi extends Command {
             waitUntil: "networkidle2",
         });
 		await page.emulateMediaType("screen")
-        
 		await page.pdf({
 			format: "a4",
 			path: `${path.resolve(pdfFileName)}`,
 			printBackground: true,
             headerTemplate: `<div class="header" style="background:#ffa400; top:0 !important; width:16px; height:884px; margin:-20px 0 0 !important; padding:0 !important;  -webkit-print-color-adjust: exact;"></div>`,
             footerTemplate: `<div class="footer" style="padding: 0 !important; margin: 0 !important; z-index:100 !important; position:relative !important; -webkit-print-color-adjust: exact; width: 100%; text-align: center; color:#000; font-size: 10px; font-family: Arial, sans-serif;"><span class="pageNumber"></span></div>`,
-            displayHeaderFooter: (flags.template === "zb_doc"),
+            displayHeaderFooter: flags.template==='zb_doc',
 			margin: {
 				top: 50,
 				bottom: 50,
@@ -150,6 +154,80 @@ class Zigzi extends Command {
 		await browser.close()
 		await fs.unlinkSync(`${htmlFileName}`)
 	}
+
+	async toPdfOfficial() {
+		const { flags } = this.parse(Zigzi)
+
+		const htmlFileName = `${this.file.replace(".md", ".html")}`
+		const pdfFileName = `${this.file.replace(".md", ".pdf")}`
+
+		const browser = await puppeteer.launch()
+        
+		const page = await browser.newPage()
+        await page.goto(`file://${path.resolve(htmlFileName)}`, 
+        {
+            waitUntil: "networkidle2",
+        });
+		await page.emulateMediaType("screen")
+
+		const baseOpt:puppeteer.PDFOptions = {
+			format: "a4",
+			path: `${path.resolve(pdfFileName)}`,
+			printBackground: true,
+            displayHeaderFooter: false,
+			margin: {
+				top: 50,
+				bottom: 50,
+				left: 58,
+				right: 58,
+			},
+		}
+
+		await page.pdf(baseOpt)
+		const dataBuffer = fs.readFileSync(path.resolve(pdfFileName));
+		const pdfInfo = await pdfParse(dataBuffer);
+		const numPages = pdfInfo.numpages;
+
+		if(numPages > 1) {
+			const resetPages = await page.pdf({
+				...baseOpt,
+				displayHeaderFooter: false,
+				pageRanges: `-${numPages-1}`
+			})
+			const lastPage = await page.pdf({
+				...baseOpt,
+				displayHeaderFooter: true,
+				pageRanges: `${numPages}`,
+				path: `${pdfFileName}-last.pdf`,
+				headerTemplate: '',
+				footerTemplate: `<div style="
+						width: 80% !important;
+						margin-left:auto;
+						margin-right:auto;
+						margin-bottom: 15px;
+						text-align: center !important;
+						font-size: 20px !important;
+						letter-spacing: 2px !important;
+						line-height: 1.5em !important;
+						font-weight: bold !important;
+						padding-top: 30px !important;
+						padding-bottom: 30px !important;
+						border-bottom: 1px solid #333 !important;
+						z-index: 999 !important;
+					"
+				>
+					<span>
+						주 식 회 사  직 　 방<br />대 표 이 사  안 성 우
+					</span>
+				</div>`
+			})
+		}
+
+
+		await browser.close()
+		await fs.unlinkSync(`${htmlFileName}`)
+	}
+
 
     async setVSCodeSetting() {
         const location = shell.exec("pwd")
