@@ -10,6 +10,7 @@ import * as pdfParse from "pdf-parse"
 
 import { Command, flags } from "@oclif/command"
 import { readFileSync, writeFileSync } from "fs"
+import { PDFDocument } from 'pdf-lib'
 
 const convertCss: { [key: string]: string } = {
 	zb_ppt: __dirname + "/../asset/ppt.css",
@@ -96,7 +97,7 @@ class Zigzi extends Command {
 		md = md.replace(RegExp(/-->/g), "")
         let markedHtml
         if(flags.template === "zb_official") {
-            markedHtml = `<header></header> ${marked(md)}`
+            markedHtml = `<header></header> ${marked(md)}<footer></footer>`
         } else {
             markedHtml = marked(md)
         }
@@ -156,8 +157,6 @@ class Zigzi extends Command {
 	}
 
 	async toPdfOfficial() {
-		const { flags } = this.parse(Zigzi)
-
 		const htmlFileName = `${this.file.replace(".md", ".html")}`
 		const pdfFileName = `${this.file.replace(".md", ".pdf")}`
 
@@ -167,67 +166,73 @@ class Zigzi extends Command {
         await page.goto(`file://${path.resolve(htmlFileName)}`, 
         {
             waitUntil: "networkidle2",
+			timeout: 60000 * 2
         });
 		await page.emulateMediaType("screen")
 
-		const baseOpt:puppeteer.PDFOptions = {
+		const headerTemplate = "<div></div>"
+		const footerTemplate = 
+		'<style>.footer { font-family: "SpoqaHanSans", sans-serif; color: #000; width: calc(100% - 58px - 58px) !important; margin-left: auto; margin-right: auto; margin-bottom: 15px; text-align: center !important; font-size: 20px !important; letter-spacing: 2px !important; line-height: 1.5em !important; font-weight: 700 !important; padding-top: 30px !important; padding-bottom: 30px !important; border-bottom: 1px solid #333 !important;}</style><div class="footer"><span>주 식 회 사&nbsp;&nbsp;직 　 방<br />대 표 이 사&nbsp;&nbsp;안 성 우</span></div>'
+
+		const baseOpt: puppeteer.PDFOptions = {
 			format: "a4",
 			path: `${path.resolve(pdfFileName)}`,
-			printBackground: true,
-            displayHeaderFooter: false,
+			headerTemplate,
+			footerTemplate,
+            displayHeaderFooter: true,
 			margin: {
 				top: 50,
 				bottom: 50,
 				left: 58,
 				right: 58,
 			},
+			timeout: 1000 * 60 * 10
 		}
-
+		
 		await page.pdf(baseOpt)
 		const dataBuffer = fs.readFileSync(path.resolve(pdfFileName));
 		const pdfInfo = await pdfParse(dataBuffer);
 		const numPages = pdfInfo.numpages;
-
-		if(numPages > 1) {
-			const resetPages = await page.pdf({
+		if(numPages === 1) {
+			await page.addStyleTag({path: path.resolve(__dirname, '../asset/official-single-page-footer.css')})
+			await page.pdf({ 
+				...baseOpt, 
+				displayHeaderFooter: false
+			})
+		} else {
+			const restBuffer = await page.pdf({
 				...baseOpt,
 				displayHeaderFooter: false,
 				pageRanges: `-${numPages-1}`
 			})
-			const lastPage = await page.pdf({
+			const lastPdfName = `${pdfFileName}-last.pdf`
+			const lastBuffer = await page.pdf({
 				...baseOpt,
 				displayHeaderFooter: true,
 				pageRanges: `${numPages}`,
-				path: `${pdfFileName}-last.pdf`,
-				headerTemplate: '',
-				footerTemplate: `<div style="
-						width: 80% !important;
-						margin-left:auto;
-						margin-right:auto;
-						margin-bottom: 15px;
-						text-align: center !important;
-						font-size: 20px !important;
-						letter-spacing: 2px !important;
-						line-height: 1.5em !important;
-						font-weight: bold !important;
-						padding-top: 30px !important;
-						padding-bottom: 30px !important;
-						border-bottom: 1px solid #333 !important;
-						z-index: 999 !important;
-					"
-				>
-					<span>
-						주 식 회 사  직 　 방<br />대 표 이 사  안 성 우
-					</span>
-				</div>`
+				path: lastPdfName,
 			})
+			await fs.unlinkSync(lastPdfName)
+
+			const mergedPdfBuffer = await this.mergePdfBuffers(restBuffer, lastBuffer)
+
+			await fs.writeFileSync(`${path.resolve(pdfFileName)}`, mergedPdfBuffer)
 		}
-
-
 		await browser.close()
 		await fs.unlinkSync(`${htmlFileName}`)
 	}
 
+	async mergePdfBuffers(target1: Buffer, target2:Buffer) {
+		const pdf1 = await PDFDocument.load(target1);
+		const pdf2 = await PDFDocument.load(target2);
+
+		const mergedPdf = await PDFDocument.create(); 
+		const copiedPagesA = await mergedPdf.copyPages(pdf1, pdf1.getPageIndices());
+		copiedPagesA.forEach((page) => mergedPdf.addPage(page)); 
+		const copiedPagesB = await mergedPdf.copyPages(pdf2, pdf2.getPageIndices());
+		copiedPagesB.forEach((page) => mergedPdf.addPage(page)); 
+		return await mergedPdf.save();
+	}
 
     async setVSCodeSetting() {
         const location = shell.exec("pwd")

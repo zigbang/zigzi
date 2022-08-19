@@ -23,6 +23,7 @@
         "@types/puppeteer": "^5.4.4",
         "@types/shelljs": "^0.8.8",
         "marked": "^2.0.1",
+        "pdf-lib": "^1.17.1",
         "pdf-parse": "^1.1.1",
         "puppeteer": "^13.1.2",
         "shelljs": "^0.8.4"

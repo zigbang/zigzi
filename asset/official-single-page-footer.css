@@ -1,0 +1,18 @@
+footer {
+    position:absolute;
+    left:0; right:0; bottom:0;
+    padding-top: 30px !important;
+    text-align: center;
+    font-size: 20px;
+    letter-spacing: 2px;
+    line-height: 1.5em;
+    font-weight: bold;
+    height: auto !important;
+    padding-bottom: 30px !important;
+    border-bottom: 1px solid #333 !important;
+}
+
+footer::after {
+    content: "주 식 회 사  직 　 방\A대 표 이 사  안 성 우";
+    white-space: pre;
+}

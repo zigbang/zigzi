@@ -3,7 +3,7 @@ html {
   }
 @import "https://s.zigbang.com/zbee/spoqa/css/SpoqaHanSansApp-kr.css";
 
-* {
+body {
 	font-family: "SpoqaHanSans", sans-serif;
 	color: #000;
 }
@@ -120,4 +120,10 @@ p {
 
 @media print {
 	body {padding:0;}
+}
+
+footer {
+	padding-top: 30px;
+	padding-bottom: 30px;
+	height: 60px;
 }
