@@ -32,6 +32,11 @@ em {
 	font-style: normal;
 }
 
+#root {
+	position: relative;
+	z-index: 2;
+	background-color: #fff;
+}
 
 header {
 	padding-bottom: 25px;
@@ -47,8 +52,9 @@ header::before {
 }
 
 footer {
-    position:absolute;
-    left:0; right:0; bottom:0;
+	position:fixed;
+	z-index: 1;
+	left:0; right:0; bottom:0;
 	padding-top: 30px;
 	text-align: center;
 	font-size: 20px;

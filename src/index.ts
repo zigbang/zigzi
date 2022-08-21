@@ -91,7 +91,7 @@ class Zigzi extends Command {
 		md = md.replace(RegExp(/-->/g), "")
         let markedHtml
         if(flags.template === "zb_official") {
-            markedHtml = `<header></header> ${marked(md)}<footer></footer>`
+            markedHtml = `<header></header><div id="root">${marked(md)}</div><footer></footer>`
         } else {
             markedHtml = marked(md)
         }
