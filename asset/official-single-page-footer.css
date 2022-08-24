@@ -1,3 +1,7 @@
+body, html, #zigbang-zigzi {
+    min-height: 100vh !important;
+}
+
 footer {
     position:absolute;
     left:0; right:0; bottom:0;
