@@ -121,9 +121,3 @@ p {
 @media print {
 	body {padding:0;}
 }
-
-footer {
-	padding-top: 30px;
-	padding-bottom: 30px;
-	height: 60px;
-}
