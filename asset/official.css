@@ -8,8 +8,10 @@ body {
 	color: #000;
 }
 
-body {padding: 20px; font-size:14px;}
-body, html, #zigbang-zigzi {display:flex; flex:1; flex-direction: column;; min-height:100%;}
+/* body {padding: 20px; font-size:14px;}
+body, html, #zigbang-zigzi {display:flex; flex:1; flex-direction: column; min-height:100%;float: none;} */
+
+body, html {margin:0; padding:0; min-height:100vh;}
 #zigbang-zigzi {
 	position: relative;
     z-index:1;
@@ -23,6 +25,7 @@ em {
 
 header {
 	border-bottom: 1px solid #333;
+	padding-top: 45px;
 	padding-bottom: 20px;
 }
 
@@ -37,7 +40,10 @@ header::before {
 }
 
 header::after {
-	float: right;
+    position: absolute;
+    right:0px;
+    top:0px;
+	/* float: right; */
 	font-size: 9px;
 	font-style: normal;
 	letter-spacing: 0;
@@ -117,7 +123,4 @@ p {
     line-height: 1.5em;
 }
 
-
-@media print {
-	body {padding:0;}
-}
+.page-break {page-break-before: always; opacity: 0;}
