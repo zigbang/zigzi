@@ -188,7 +188,6 @@ class Zigzi extends Command {
 			}
 			.footer-marker {
 				width: 150px !important;
-				height: 40px !important;
 				margin: auto !important;
 			}
 		</style>
