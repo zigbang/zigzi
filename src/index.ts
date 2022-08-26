@@ -6,9 +6,11 @@ import * as child_process from "child_process"
 import * as marked from "marked"
 import * as puppeteer from "puppeteer"
 import * as shell from "shelljs"
+import * as pdfParse from "pdf-parse"
 
 import { Command, flags } from "@oclif/command"
 import { readFileSync, writeFileSync } from "fs"
+import { PDFDocument } from 'pdf-lib'
 
 const convertCss: { [key: string]: string } = {
 	zb_ppt: __dirname + "/../asset/ppt.css",
@@ -62,7 +64,11 @@ class Zigzi extends Command {
             } else {
                 await this.toHtml()
                 if (output === "pdf") {
-                    await this.toPdf()
+					if(flags.template === 'zb_official') {
+						await this.toPdfOfficial()
+					} else {
+						await this.toPdf()
+					}
                 }
             }
         }
@@ -131,14 +137,13 @@ class Zigzi extends Command {
             waitUntil: "networkidle2",
         });
 		await page.emulateMediaType("screen")
-        
 		await page.pdf({
 			format: "a4",
 			path: `${path.resolve(pdfFileName)}`,
 			printBackground: true,
             headerTemplate: `<div class="header" style="background:#ffa400; top:0 !important; width:16px; height:884px; margin:-20px 0 0 !important; padding:0 !important;  -webkit-print-color-adjust: exact;"></div>`,
             footerTemplate: `<div class="footer" style="padding: 0 !important; margin: 0 !important; z-index:100 !important; position:relative !important; -webkit-print-color-adjust: exact; width: 100%; text-align: center; color:#000; font-size: 10px; font-family: Arial, sans-serif;"><span class="pageNumber"></span></div>`,
-            displayHeaderFooter: (flags.template === "zb_doc"),
+            displayHeaderFooter: flags.template==='zb_doc',
 			margin: {
 				top: 50,
 				bottom: 50,
@@ -149,6 +154,106 @@ class Zigzi extends Command {
 
 		await browser.close()
 		await fs.unlinkSync(`${htmlFileName}`)
+	}
+
+	async toPdfOfficial() {
+		const htmlFileName = `${this.file.replace(".md", ".html")}`
+		const pdfFileName = `${this.file.replace(".md", ".pdf")}`
+
+		const browser = await puppeteer.launch()
+        
+		const page = await browser.newPage()
+        await page.goto(`file://${path.resolve(htmlFileName)}`, 
+        {
+            waitUntil: "networkidle2",
+			timeout: 60000 * 2
+        });
+		await page.emulateMediaType("screen")
+
+		const footerImgBase64 = fs.readFileSync(path.resolve(__dirname, '../asset/footerImgBase64.txt'),'utf8')
+
+		const headerTemplate = "<div></div>"
+		const footerTemplate = 
+		`
+		<style>
+			.footer {
+				width: calc(100% - 58px - 58px) !important;
+				margin-left: auto;
+				margin-right: auto;
+				margin-bottom: 15px;
+				text-align: center !important;
+				padding-top: 30px !important;
+				padding-bottom: 30px !important;
+				border-bottom: 1px solid #333 !important;
+			}
+			.footer-marker {
+				width: 150px !important;
+				margin: auto !important;
+			}
+		</style>
+		<div class="footer">
+			<img class="footer-marker" src="${footerImgBase64}"/>
+		</div>
+		`
+
+		const baseOpt: puppeteer.PDFOptions = {
+			format: "a4",
+			path: `${path.resolve(pdfFileName)}`,
+			headerTemplate,
+			footerTemplate,
+            displayHeaderFooter: true,
+			margin: {
+				top: 50,
+				bottom: 50,
+				left: 58,
+				right: 58,
+			},
+			timeout: 1000 * 60 * 10
+		}
+		
+		await page.pdf(baseOpt)
+		const dataBuffer = fs.readFileSync(path.resolve(pdfFileName));
+		const pdfInfo = await pdfParse(dataBuffer);
+		const numPages = pdfInfo.numpages;
+		if(numPages === 1) {
+			await page.addStyleTag({path: path.resolve(__dirname, '../asset/official-single-page-footer.css')})
+			await page.pdf({ 
+				...baseOpt, 
+				displayHeaderFooter: false
+			})
+		} else {
+			const restBuffer = await page.pdf({
+				...baseOpt,
+				displayHeaderFooter: false,
+				pageRanges: `-${numPages-1}`
+			})
+			const lastPdfName = `${pdfFileName}-last.pdf`
+			const lastBuffer = await page.pdf({
+				...baseOpt,
+				displayHeaderFooter: true,
+				pageRanges: `${numPages}`,
+				path: lastPdfName,
+			})
+			await fs.unlinkSync(lastPdfName)
+
+			const mergedPdfBuffer = await this.mergePdfBuffers(restBuffer, lastBuffer)
+
+			await fs.writeFileSync(`${path.resolve(pdfFileName)}`, mergedPdfBuffer)
+		}
+		await browser.close()
+		await fs.unlinkSync(`${htmlFileName}`)
+	}
+
+	async mergePdfBuffers(target1: Buffer, target2:Buffer) {
+		const pdf1 = await PDFDocument.load(target1);
+		const pdf2 = await PDFDocument.load(target2);
+
+		const mergedPdf = await PDFDocument.create(); 
+		const copiedPagesA = await mergedPdf.copyPages(pdf1, pdf1.getPageIndices());
+		copiedPagesA.forEach((page) => mergedPdf.addPage(page)); 
+		const copiedPagesB = await mergedPdf.copyPages(pdf2, pdf2.getPageIndices());
+		copiedPagesB.forEach((page) => mergedPdf.addPage(page)); 
+		return await mergedPdf.save();
 	}
 
     async setVSCodeSetting() {
