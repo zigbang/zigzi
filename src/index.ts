@@ -244,6 +244,13 @@ class Zigzi extends Command {
 					"../asset/official-single-page-footer.css"
 				),
 			})
+			await page.addStyleTag({
+				content: `
+			footer::after {
+					content: "${(footer as string[]).join("\\A")}";
+					white-space: pre;
+			}`,
+			})
 			await page.pdf({
 				...baseOpt,
 				displayHeaderFooter: false,
