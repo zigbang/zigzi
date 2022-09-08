@@ -1,4 +1,5 @@
 /** @format */
+/// <reference types="node" />
 import { Command, flags } from "@oclif/command";
 declare class Zigzi extends Command {
     static description: string;
@@ -19,6 +20,8 @@ declare class Zigzi extends Command {
     marp(): Promise<void>;
     toHtml(): Promise<void>;
     toPdf(): Promise<void>;
+    toPdfOfficial(): Promise<void>;
+    mergePdfBuffers(target1: Buffer, target2: Buffer): Promise<Uint8Array>;
     setVSCodeSetting(): Promise<void>;
 }
 export = Zigzi;
