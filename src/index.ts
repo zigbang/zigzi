@@ -202,15 +202,15 @@ class Zigzi extends Command {
 		const footerTemplate = `
 		<style>
 			.footer {
-				width: 100% !important
-				margin: 0 58px 15px
-				text-align: center !important
-				padding-top: 30px !important
-				padding-bottom: 30px !important
-				border-bottom: 1px solid #333 !important
-  			display: flex
-  			flex-direction: column
-				align-items: center
+				width: 100% !important;
+				margin: 0 58px 15px;
+				text-align: center !important;
+				padding-top: 30px !important;
+				padding-bottom: 30px !important;
+				border-bottom: 1px solid #333 !important;
+  			display: flex;
+  			flex-direction: column;
+				align-items: center;
 			}
 		</style>
 		<div class="footer">
@@ -243,6 +243,13 @@ class Zigzi extends Command {
 					__dirname,
 					"../asset/official-single-page-footer.css"
 				),
+			})
+			await page.addStyleTag({
+				content: `
+			footer::after {
+					content: "${(footer as string[]).join("\\A")}";
+					white-space: pre;
+			}`,
 			})
 			await page.pdf({
 				...baseOpt,
